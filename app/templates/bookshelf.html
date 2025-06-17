@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Your Bookshelf</h2>
+    {% for entry in bookshelf %}
+        <div class="card mb-3 p-3 shadow-sm">
+            <h4>{{ entry.book.title }}</h4>
+            <p><strong>Author:</strong> {{ entry.book.author or 'Unknown' }}</p>
+            <p><strong>Year:</strong> {{ entry.book.year or 'N/A' }}</p>
+            <form method="POST" action="{{ url_for('main.review_book', userbook_id=entry.id) }}">
+                <div class="mb-2">
+                    <textarea name="review" class="form-control" placeholder="Write your review">{{ entry.review or '' }}</textarea>
+                </div>
+                <div class="mb-2">
+                    <input type="number" name="rating" min="1" max="5" class="form-control" value="{{ entry.rating or '' }}" placeholder="Rating out of 5">
+                </div>
+                <button class="btn btn-sm btn-primary">Submit Review</button>
+            </form>
+            <a href="{{ url_for('main.public_reviews', book_id=entry.book.id) }}" class="btn btn-link btn-sm mt-2">See all reviews</a>
+        </div>
+    {% endfor %}
+{% endblock %}

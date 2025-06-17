@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>Search Results</h2>
+    {% if books %}
+        <div class="row">
+        {% for book in books %}
+            <div class="col-md-6 mb-3">
+                <div class="card p-3">
+                    <h4>{{ book.title }}</h4>
+                    <p><strong>Author:</strong> {{ book.author_name | join(', ') if book.author_name else 'Unknown' }}</p>
+                    <p><strong>First Published:</strong> {{ book.first_publish_year or 'N/A' }}</p>
+                    {% if current_user.is_authenticated %}
+                        <form method="POST" action="{{ url_for('main.add_to_bookshelf') }}">
+                            <input type="hidden" name="ol_id" value="{{ book.key.split('/')[-1] }}">
+                            <input type="hidden" name="title" value="{{ book.title }}">
+                            <input type="hidden" name="author" value="{{ book.author_name | join(', ') if book.author_name else '' }}">
+                            <input type="hidden" name="year" value="{{ book.first_publish_year or '' }}">
+                            <button class="btn btn-sm btn-success mt-2">Add to Bookshelf</button>
+                        </form>
+                    {% else %}
+                        <p class="text-muted">Login to add to bookshelf</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+{% endblock %}

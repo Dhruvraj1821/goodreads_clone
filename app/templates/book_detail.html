@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ book.title }}</h2>
+    <h5 class="text-muted">{{ book.author }} ({{ book.year }})</h5>
+
+    {% if book.average_rating %}
+        <p class="mt-2">⭐ Average Rating: <strong>{{ book.average_rating }}</strong> / 5</p>
+    {% else %}
+        <p class="text-muted">No ratings yet</p>
+    {% endif %}
+
+    <hr>
+    <h4>Reviews</h4>
+    {% if reviews %}
+        {% for r in reviews %}
+            <div class="mb-3">
+                <strong>{{ r.user.username }}</strong> rated it {{ r.rating }} ⭐
+                <p>{{ r.review }}</p>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">No reviews yet.</p>
+    {% endif %}
+
+    <a href="{{ url_for('main.bookshelf') }}" class="btn btn-secondary mt-3">Back to Bookshelf</a>
+</div>
+{% endblock %}
+
